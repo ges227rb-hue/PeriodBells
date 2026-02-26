@@ -242,7 +242,7 @@ function generate() {
     showToast("Timetable Applied!");
 }
 
-function addTableRow(name, start, dur,end) {
+function addTableRow(name, start, end, dur) {
     const tr = document.createElement('tr');
     tr.dataset.name = name;
     tr.dataset.start = start;
