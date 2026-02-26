@@ -190,7 +190,7 @@ function generate() {
     addTableRow("Opening", getHHMM(currentTime), 0);
 
     // Add Prayer
-    addTableRow("Morning Prayer", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20) ,20);
+    addTableRow("Morning Prayer", getHHMM(currentTime),getHHMM(currentTime).setMinutes(currentTime.getMinutes() + 20) ,20);
     currentTime.setMinutes(currentTime.getMinutes() + 20);
     //Add Period 1
   addTableRow("Period 1", getHHMM(currentTime),currentTime.getMinutes() + 40,40);
