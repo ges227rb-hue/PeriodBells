@@ -70,7 +70,7 @@
     <div class="clock-display" id="mainClock">00:00:00</div>
     <div class="status-bar">
         <span class="badge" id="dayDisplay">Monday</span>
-        <span class="badge" id="typeDisplay">Not Set</span>
+        //<span class="badge" id="typeDisplay">Not Set</span>
     </div>
 
     <section class="card" id="timetableSection">
@@ -190,38 +190,38 @@ function generate() {
     addTableRow("Opening", getHHMM(currentTime), 0);
 
     // Add Prayer
-    addTableRow("Morning Prayer", getHHMM(currentTime),getHHMM(currentTime).setMinutes(currentTime.getMinutes() + 20) ,20);
+    addTableRow("Morning Prayer", getHHMM(currentTime),20);
     currentTime.setMinutes(currentTime.getMinutes() + 20);
     //Add Period 1
-  addTableRow("Period 1", getHHMM(currentTime),currentTime.getMinutes() + 40,40);
+  addTableRow("Period 1", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 40),40);
   currentTime.setMinutes(currentTime.getMinutes()+40);
   //Period 2
-  addTableRow("Period 2", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 30),30);
+  addTableRow("Period 2", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 3
-  addTableRow("Period 3", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
+  addTableRow("Period 3", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 4
-  addTableRow("Period 4", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
+  addTableRow("Period 4", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 5
-  addTableRow("Period 5", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
+  addTableRow("Period 5", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 6
-  addTableRow("Period 6", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
+  addTableRow("Period 6", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 40),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Break
-  addTableRow("Break", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 0),0);
+  addTableRow("Break", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 0),0);
   currentTime.setMinutes(currentTime.getMinutes()+0);
    //Period 7
-  addTableRow("Period 7", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 30),30);
+  addTableRow("Period 7", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 8
-  addTableRow("Period 8", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
+  addTableRow("Period 8", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
   //CloseTime
-   addTableRow("School Close", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 0),0);
-  currentTime.setMinutes(currentTime.getMinutes()+0);
+   addTableRow("Closing", getHHMM(currentTime),getHHMM(currentTime.getMinutes() + 0),0);
+  //currentTime.setMinutes(currentTime.getMinutes()+0);
     /*for(let i=1; i<=total; i++) {
         addTableRow(i.toString(), getHHMM(currentTime), 30);
         currentTime.setMinutes(currentTime.getMinutes() + 30);
@@ -284,7 +284,8 @@ async function saveGoogle() {
         schoolName: $('#schoolName').value,
         rows: Array.from(document.querySelectorAll('#tbody tr')).map(r => ({
             name: r.dataset.name,
-            start: r.dataset.start
+            start: r.dataset.start,
+          end: r.dataset.end
         }))
     };
 
