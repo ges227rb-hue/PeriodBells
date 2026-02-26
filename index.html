@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pro School Bell System</title>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<style>
+  :root{
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --text:#0f172a;
+    --brand:#10b981;
+    --accent:#3b82f6;
+    --border:#e2e8f0;
+    --radius:16px;
+  }
+
+  body{
+    margin:0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 20px;
+  }
+
+  /* MODAL STYLES */
+  .modal-overlay {
+    position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5);
+    display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px);
+  }
+  .modal-content {
+    background: white; padding: 25px; border-radius: var(--radius); width: 90%; max-width: 800px;
+    max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+  .close-modal { cursor: pointer; font-size: 24px; font-weight: bold; color: #64748b; }
+
+  /* UI COMPONENTS */
+  .main-container { max-width: 1000px; margin: 0 auto; }
+  .card { background: white; border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+  .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  label { font-size: 12px; font-weight: 600; color: #64748b; }
+  input, select { padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+  
+  .btn { 
+    padding: 12px 20px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; 
+    transition: 0.2s; background: var(--brand); color: white;
+  }
+  .btn-secondary { background: #64748b; }
+  .btn-open { position: fixed; bottom: 20px; right: 20px; border-radius: 50px; box-shadow: 0 10px 15px rgba(16,185,129,0.4); }
+
+  /* TABLE STYLES */
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th { background: #f1f5f9; text-align: left; padding: 12px; font-size: 13px; }
+  td { padding: 12px; border-bottom: 1px solid var(--border); }
+  tr.active { background: #dcfce7; border-left: 4px solid var(--brand); font-weight: bold; }
+
+  .clock-display { text-align: center; font-size: 48px; font-weight: 800; margin-bottom: 20px; font-variant-numeric: tabular-nums; }
+  .status-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+  .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #e2e8f0; }
+
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 8px; z-index: 2000; display: none; }
+</style>
+</head>
+<body>
+
+  <div id="toast" class="toast"></div>
+
+  <div class="main-container">
+    <div class="clock-display" id="mainClock">00:00:00</div>
+    <div class="status-bar">
+        <span class="badge" id="dayDisplay">Monday</span>
+        <span class="badge" id="typeDisplay">Not Set</span>
+    </div>
+
+    <section class="card" id="timetableSection">
+      <div id="ttHeader" style="text-align: center; margin-bottom: 20px;">
+        <h2 id="viewSchoolName">School Timetable</h2>
+        <p id="viewAddress" style="color: #64748b; margin-top: -10px;"></p>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="4" style="text-align:center">No timetable generated. Click "System Settings" to start.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <button class="btn btn-open" onclick="toggleModal(true)">⚙️ System Settings</button>
+
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>System Configuration</h3>
+        <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+      </div>
+
+      <div class="grid-form">
+        <div class="field"><label>School Name</label><input id="schoolName" placeholder="School Name"></div>
+        <div class="field"><label>Address</label><input id="schoolAddress" placeholder="Location"></div>
+        <div class="field"><label>Start Time</label><input id="startTime" type="time" value="08:00"></div>
+        <div class="field"><label>Close Time</label><input id="endTime" type="time" value="14:00"></div>
+        <div class="field"><label>Periods</label><input id="totalPeriods" type="number" value="8"></div>
+        <div class="field"><label>Break After Period</label><input id="breakPeriod" type="number" value="4"></div>
+        <div class="field"><label>Apps Script URL</label><input id="scriptUrl" placeholder="https://script.google.com/..."></div>
+      </div>
+
+      <div style="margin-top:20px; display:flex; gap:10px; flex-wrap: wrap;">
+        <button class="btn" onclick="generate()">Apply & Generate</button>
+        <button class="btn btn-secondary" onclick="saveGoogle()">☁️ Sync to Google</button>
+        <button class="btn btn-secondary" onclick="downloadPdf()">📄 Export PDF</button>
+        <button class="btn btn-secondary" id="testBellBtn">🔊 Test Bell</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bellAudio" preload="auto"></audio>
+
+<script>
+const $ = sel => document.querySelector(sel);
+const pad = n => String(n).padStart(2,'0');
+
+// MODAL CONTROL
+function toggleModal(show) {
+  $('#settingsModal').style.display = show ? 'flex' : 'none';
+}
+
+function showToast(msg) {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// TIME HELPERS
+function getHHMM(date = new Date()) {
+    return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+// PERIOD TO SOUND MAPPING
+function playSoundForPeriod(periodName) {
+    const audio = $('#bellAudio');
+    let file = "";
+
+    if (periodName === "Morning Prayer") file = "Assembly.mp3";
+    else if (periodName === "1") file = "T-1.mp3";
+    else if (periodName === "2") file = "T-2.mp3";
+    else if (periodName === "3") file = "T-3.mp3";
+    else if (periodName === "4") file = "T-4.mp3";
+    else if (periodName === "5") file = "T-5.mp3";
+    else if (periodName === "6") file = "T-6.mp3";
+    else if (periodName === "7") file = "T-1.mp3"; // Reusing per your request
+    else if (periodName === "8") file = "T-2.mp3"; // Reusing per your request
+    else if (periodName === "Break") file = "Lunch.mp3";
+    else if (periodName === "Opening") file = "welcome.mp3";
+    else if (periodName === "Closing") file = "SchoolClose.mp3";
+
+    if (file) {
+        audio.src = `public/${file}`; // Relative path for GitHub Pages
+        audio.play().catch(e => showToast("Click page to enable audio"));
+    }
+}
+
+// GENERATION LOGIC
+function generate() {
+    const start = $('#startTime').value;
+    const total = parseInt($('#totalPeriods').value);
+    const breakAt = parseInt($('#breakPeriod').value);
+    
+    if(!start) return showToast("Set Start Time");
+
+    let currentTime = new Date();
+    const [h, m] = start.split(':');
+    currentTime.setHours(h, m, 0);
+
+    const tbody = $('#tbody');
+    tbody.innerHTML = '';
+    
+    // Add Opening Sound Marker
+    addTableRow("Opening", getHHMM(currentTime), 0);
+
+    // Add Prayer
+    addTableRow("Morning Prayer", getHHMM(currentTime), 15);
+    currentTime.setMinutes(currentTime.getMinutes() + 15);
+
+    for(let i=1; i<=total; i++) {
+        addTableRow(i.toString(), getHHMM(currentTime), 40);
+        currentTime.setMinutes(currentTime.getMinutes() + 40);
+
+        if(i === breakAt) {
+            addTableRow("Break", getHHMM(currentTime), 20);
+            currentTime.setMinutes(currentTime.getMinutes() + 20);
+        }
+    }
+
+    // Add Closing Marker
+    addTableRow("Closing", getHHMM(currentTime), 0);
+
+    $('#viewSchoolName').textContent = $('#schoolName').value || "School Timetable";
+    $('#viewAddress').textContent = $('#schoolAddress').value;
+    
+    toggleModal(false);
+    showToast("Timetable Applied!");
+}
+
+function addTableRow(name, start, dur) {
+    const tr = document.createElement('tr');
+    tr.dataset.name = name;
+    tr.dataset.start = start;
+    tr.innerHTML = `<td>${name}</td><td>${start}</td><td>--</td><td>${dur}</td>`;
+    $('#tbody').appendChild(tr);
+}
+
+// MONITORING & BELLS
+let lastTriggered = "";
+function tick() {
+    const now = new Date();
+    const hhmm = getHHMM(now);
+    $('#mainClock').textContent = now.toLocaleTimeString();
+    $('#dayDisplay').textContent = now.toLocaleDateString('en-US', {weekday: 'long'});
+
+    const rows = document.querySelectorAll('#tbody tr');
+    rows.forEach(row => {
+        if(row.dataset.start === hhmm && lastTriggered !== hhmm + row.dataset.name) {
+            row.classList.add('active');
+            playSoundForPeriod(row.dataset.name);
+            lastTriggered = hhmm + row.dataset.name;
+        } else if (row.dataset.start !== hhmm) {
+            // Logic to keep current period highlighted could go here
+        }
+    });
+}
+
+setInterval(tick, 1000);
+
+$('#testBellBtn').onclick = () => playSoundForPeriod("1");
+
+// SYNC LOGIC
+async function saveGoogle() {
+    const url = $('#scriptUrl').value;
+    if(!url) return showToast("URL missing");
+    
+    const data = {
+        schoolName: $('#schoolName').value,
+        rows: Array.from(document.querySelectorAll('#tbody tr')).map(r => ({
+            name: r.dataset.name,
+            start: r.dataset.start
+        }))
+    };
+
+    try {
+        await fetch(url, { method: 'POST', body: JSON.stringify(data) });
+        showToast("Synced to Cloud!");
+    } catch (e) { showToast("Sync Failed"); }
+}
+
+function downloadPdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    html2canvas($('#timetableSection')).then(canvas => {
+        const img = canvas.toDataURL("image/png");
+        doc.addImage(img, 'PNG', 10, 10, 190, 0);
+        doc.save("timetable.pdf");
+    });
+}
+</script>
+</body>
+</html>
