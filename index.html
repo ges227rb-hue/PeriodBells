@@ -173,6 +173,7 @@ function playSoundForPeriod(periodName) {
 // GENERATION LOGIC
 function generate() {
     const start = $('#startTime').value;
+  const ent = $('#endTime').Value;
     const total = parseInt($('#totalPeriods').value);
     const breakAt = parseInt($('#breakPeriod').value);
     
@@ -189,37 +190,37 @@ function generate() {
     addTableRow("Opening", getHHMM(currentTime), 0);
 
     // Add Prayer
-    addTableRow("Morning Prayer", getHHMM(currentTime), 20);
+    addTableRow("Morning Prayer", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20) ,20);
     currentTime.setMinutes(currentTime.getMinutes() + 20);
     //Add Period 1
-  addTableRow("Period 1", getHHMM(currentTime),40);
+  addTableRow("Period 1", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 40),40);
   currentTime.setMinutes(currentTime.getMinutes()+40);
   //Period 2
-  addTableRow("Period 2", getHHMM(currentTime),30);
+  addTableRow("Period 2", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 3
-  addTableRow("Period 3", getHHMM(currentTime),30);
+  addTableRow("Period 3", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 4
-  addTableRow("Period 4", getHHMM(currentTime),30);
+  addTableRow("Period 4", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 5
-  addTableRow("Period 5", getHHMM(currentTime),30);
+  addTableRow("Period 5", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 6
-  addTableRow("Period 6", getHHMM(currentTime),30);
+  addTableRow("Period 6", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Break
-  addTableRow("Break", getHHMM(currentTime),0);
+  addTableRow("Break", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 0),0);
   currentTime.setMinutes(currentTime.getMinutes()+0);
    //Period 7
-  addTableRow("Period 7", getHHMM(currentTime),30);
+  addTableRow("Period 7", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 30),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
    //Period 8
-  addTableRow("Period 8", getHHMM(currentTime),30);
+  addTableRow("Period 8", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20),30);
   currentTime.setMinutes(currentTime.getMinutes()+30);
   //CloseTime
-   addTableRow("Period 8", getHHMM(currentTime),0);
+   addTableRow("School Close", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 0),0);
   currentTime.setMinutes(currentTime.getMinutes()+0);
     /*for(let i=1; i<=total; i++) {
         addTableRow(i.toString(), getHHMM(currentTime), 30);
