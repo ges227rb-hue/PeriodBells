@@ -193,7 +193,7 @@ function generate() {
     addTableRow("Morning Prayer", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 20) ,20);
     currentTime.setMinutes(currentTime.getMinutes() + 20);
     //Add Period 1
-  addTableRow("Period 1", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 40),40);
+  addTableRow("Period 1", getHHMM(currentTime),currentTime.getMinutes() + 40,40);
   currentTime.setMinutes(currentTime.getMinutes()+40);
   //Period 2
   addTableRow("Period 2", getHHMM(currentTime),currentTime.setMinutes(currentTime.getMinutes() + 30),30);
