@@ -191,8 +191,37 @@ function generate() {
     // Add Prayer
     addTableRow("Morning Prayer", getHHMM(currentTime), 20);
     currentTime.setMinutes(currentTime.getMinutes() + 20);
-
-    for(let i=1; i<=total; i++) {
+    //Add Period 1
+  addTableRow("Period 1", getHHMM(currentTime),40);
+  currentTime.setMinutes(currentTime.getMinutes()+40);
+  //Period 2
+  addTableRow("Period 2", getHHMM(currentTime),30);
+  currentTime.setMinutes(currentTime.getMinutes()+30);
+   //Period 3
+  addTableRow("Period 3", getHHMM(currentTime),30);
+  currentTime.setMinutes(currentTime.getMinutes()+30);
+   //Period 4
+  addTableRow("Period 4", getHHMM(currentTime),30);
+  currentTime.setMinutes(currentTime.getMinutes()+30);
+   //Period 5
+  addTableRow("Period 5", getHHMM(currentTime),30);
+  currentTime.setMinutes(currentTime.getMinutes()+30);
+   //Period 6
+  addTableRow("Period 6", getHHMM(currentTime),30);
+  currentTime.setMinutes(currentTime.getMinutes()+30);
+   //Break
+  addTableRow("Break", getHHMM(currentTime),0);
+  currentTime.setMinutes(currentTime.getMinutes()+0);
+   //Period 7
+  addTableRow("Period 7", getHHMM(currentTime),30);
+  currentTime.setMinutes(currentTime.getMinutes()+30);
+   //Period 8
+  addTableRow("Period 8", getHHMM(currentTime),30);
+  currentTime.setMinutes(currentTime.getMinutes()+30);
+  //CloseTime
+   addTableRow("Period 8", getHHMM(currentTime),0);
+  currentTime.setMinutes(currentTime.getMinutes()+0);
+    /*for(let i=1; i<=total; i++) {
         addTableRow(i.toString(), getHHMM(currentTime), 30);
         currentTime.setMinutes(currentTime.getMinutes() + 30);
 
@@ -204,7 +233,7 @@ function generate() {
 
     // Add Closing Marker
     addTableRow("Closing", getHHMM(currentTime), 0);
-
+*/
     $('#viewSchoolName').textContent = $('#schoolName').value || "School Timetable";
     $('#viewAddress').textContent = $('#schoolAddress').value;
     
@@ -212,11 +241,12 @@ function generate() {
     showToast("Timetable Applied!");
 }
 
-function addTableRow(name, start, dur) {
+function addTableRow(name, start, dur,end) {
     const tr = document.createElement('tr');
     tr.dataset.name = name;
     tr.dataset.start = start;
-    tr.innerHTML = `<td>${name}</td><td>${start}</td><td>--</td><td>${dur}</td>`;
+  tr.dataset.end = end;
+    tr.innerHTML = `<td>${name}</td><td>${start}</td><td>${end}</td><td>${dur}</td>`;
     $('#tbody').appendChild(tr);
 }
 
