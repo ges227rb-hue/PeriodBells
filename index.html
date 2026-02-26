@@ -189,16 +189,16 @@ function generate() {
     addTableRow("Opening", getHHMM(currentTime), 0);
 
     // Add Prayer
-    addTableRow("Morning Prayer", getHHMM(currentTime), 15);
-    currentTime.setMinutes(currentTime.getMinutes() + 15);
+    addTableRow("Morning Prayer", getHHMM(currentTime), 20);
+    currentTime.setMinutes(currentTime.getMinutes() + 20);
 
     for(let i=1; i<=total; i++) {
-        addTableRow(i.toString(), getHHMM(currentTime), 40);
-        currentTime.setMinutes(currentTime.getMinutes() + 40);
+        addTableRow(i.toString(), getHHMM(currentTime), 30);
+        currentTime.setMinutes(currentTime.getMinutes() + 30);
 
         if(i === breakAt) {
-            addTableRow("Break", getHHMM(currentTime), 20);
-            currentTime.setMinutes(currentTime.getMinutes() + 20);
+            addTableRow("Break", getHHMM(currentTime), 30);
+            currentTime.setMinutes(currentTime.getMinutes() + 30);
         }
     }
 
